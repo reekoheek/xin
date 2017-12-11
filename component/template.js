@@ -70,8 +70,15 @@ T.prototype = {
   },
 
   set (path, value) {
-    path = this.__templateGetPathAsArray(path);
+    if (typeof path === 'object') {
+      let keys = Object.keys(path);
+      let values = Object.values(path);
+      return keys.map((key,i) => {
+        this.set(key, values[i]);
+      })
+    }
 
+    path = this.__templateGetPathAsArray(path);
     let oldValue = this.get(path);
 
     if (value === oldValue) {
